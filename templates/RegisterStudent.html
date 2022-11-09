@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+
+
+<h1><u>STUDENT REGISTRATION</u></h1>
+
+
+<section id="form">
+   {% macro render_field(field) %}
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+{% endmacro %}
+<form method="POST" action="">
+
+            {{render_field(form.Student_Name, class_="form-control", placeholder="Enter your name")}}
+        <br>
+            {{render_field(form.Email, class_="form-control", placeholder="Enter your email")}}
+    <br>
+            {{render_field(form.Username, class_="form-control", placeholder="Enter a username")}}
+    <br>
+            {{render_field(form.Password, class_="form-control", placeholder="Enter a password")}}
+    <br>
+            {{render_field(form.confirm, class_="form-control", placeholder="Confirm password")}}
+        <p><input type = "submit" class = "btn btn-primary" value=" Submit"></p>
+    </form>
+    <a href="/"><i class='fas fa-funnel-dollar'></i>HOME</a>
+</section>
+
+</body>
+
+</html>

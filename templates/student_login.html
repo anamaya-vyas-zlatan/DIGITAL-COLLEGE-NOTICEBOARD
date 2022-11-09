@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Login</title>
+</head>
+<body>
+
+    <h1> <center>Login as Student</center></h1><br>
+ {% if error %}
+        <p><strong>Error</strong>: {{error}}</p>
+    {% endif %}
+  <form action="" method="POST">
+      <input type="text"
+        name="Username" class="form-control" placeholder="Username"; value={{request.form.Username}}>
+      <input type="password" name="Password" class="form-control" placeholder="Password" value={{request.form.password}}><center>
+      <br>
+    <button type="submit" class="btn btn-dark">Login</button>
+</center>
+<br>
+  </form>
+</body>
+</html>
