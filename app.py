@@ -516,21 +516,89 @@ def logout_admin():
 
 #Club Dashboard
 @app.route('/dashboardadmin', methods=['GET', 'POST'])
-@is_logged_in_club
+@is_logged_in_admin
 def dashboard_admin():
     name = session['Username']
     return render_template('Admin_Dashboard.html', name=name)
 
+#View Students
+@app.route('/ViewStudents_admin',methods = ['GET', 'POST'])
+@is_logged_in_admin
+def viewstudents_admin():
+    x = 1
+    cur =mysql.connection.cursor()
+    Username = session['Username']
+    result = cur.execute("SELECT * FROM Student")
+    details = cur.fetchall()
+    if result > 0:
+        return render_template('View_Students_Admin.html', details = details,x=x, Username = Username)
+    else:
+        x = 0
+        error = 'Students not found'
+        return render_template('View_Students_Admin.html', error=error, x=x, Username = Username)
+        cur.close()
+    return render_template('View_Students_Admin.html', Username =Username)
 
+#View Teachers
+@app.route('/ViewTeachers_admin',methods = ['GET', 'POST'])
+@is_logged_in_admin
+def viewteachers_admin():
+    x = 1
+    cur =mysql.connection.cursor()
+    Username = session['Username']
+    result = cur.execute("SELECT * FROM Teacher")
+    details = cur.fetchall()
+    if result > 0:
+        return render_template('View_Teachers_Admin.html', details = details, x=x, Username = Username)
+    else:
+        x = 0
+        error = 'Teachers not found'
+        return render_template('View_Teachers_Admin.html', error=error, x=x, Username = Username)
+        cur.close()
+    return render_template('View_Teachers_Admin.html', Username =Username)
 
+#View Clubs
+@app.route('/ViewClubs_admin',methods = ['GET', 'POST'])
+@is_logged_in_admin
+def viewclubs_admin():
+    x = 1
+    cur =mysql.connection.cursor()
+    Username = session['Username']
+    result = cur.execute("SELECT * FROM Club")
+    details = cur.fetchall()
+    if result > 0:
+        return render_template('View_Club_Admin.html', details = details, x=x, Username = Username)
+    else:
+        x = 0
+        error = 'Clubs not found'
+        return render_template('View_Club_Admin.html', error=error, x=x, Username = Username)
+        cur.close()
+    return render_template('View_Club_Admin.html', Username =Username)
 
+#Add Message Club
+class CreateMessageAdmin(Form):
+    Message_Text = TextAreaField('Message Text')
 
+@app.route('/add_messaage_admin', methods=['GET', 'POST'])
+@is_logged_in_admin
+def addmessageAdmin():
+    form = CreateMessageAdmin(request.form)
+    error = None
+    if request.method == 'POST' and form.validate():
+        Message_Text = form.Message_Text.data
+        cur = mysql.connection.cursor()
+        flag =0
+        Username = session['Username']
+        cur.execute(
+            "INSERT INTO College_Admin_Message(Username, Message_Text) VALUES(%s, %s)",
+            (Username, Message_Text))
+        mysql.connection.commit()
+        cur.close()
+        if flag == 0:
+            flash('Message Sent')
+            return redirect(url_for('addmessageAdmin'))
 
-
-
-
-
-
+    return render_template('add_Message_Admin.html')
 
 
 #################################################################
