@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+<H1>Club Members</H1>
+{% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+                    <p>{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+ {% if error %}
+        <p><strong>Error</strong>: {{error}}</p>
+    {% endif %}
+<br>
+  </form>
+{% if x %}
+
+ <h3>Welcome, {{Club_ID}}</h3>
+<table>
+<tr>
+    <th>Student Name</th>
+    <th>Student ID</th>
+    <th>Email</th>
+    <th>Delete</th>
+  </tr>
+{% for details in details %}
+<TR>
+   <TD class="Student Name">{{details.Student_Name}}</TD>
+   <TD class="Student Id">{{details.Student_ID}}</TD>
+   <TD class="Email"><SPAN>{{details.Student_Email}}</SPAN></TD>
+   <TD> <form action="{{url_for('delete_student_club', Student_ID=details.Student_ID)}}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Delete" class="btn btn-danger">
+          </form></TD>
+</TR>
+{% endfor %}
+</table>
+{% endif %}
+
+<a href="/dashboardclub"><i class='fas fa-funnel-dollar'></i>Home</a><br>
+
+
+</body>
+
+</html>

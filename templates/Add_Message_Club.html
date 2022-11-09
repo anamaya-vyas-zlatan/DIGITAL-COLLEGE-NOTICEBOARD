@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+
+
+<h1><u>Send a Message</u></h1>
+
+
+<section id="form">
+   {% macro render_field(field) %}
+  <dt>{{ field.label }}
+  <dd>{{ field(**kwargs)|safe }}
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+  </dd>
+{% endmacro %}
+{% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+                    <p>{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+ {% if error %}
+        <p><strong>Error</strong>: {{error}}</p>
+    {% endif %}
+<form method="POST" action="">
+
+            <input type="text" name="Message_Text" class="form-control" placeholder="Enter your message" value={{request.form.Message_Text}}>
+        <br>
+        <p><input type = "submit" class = "btn btn-primary" value=" Submit"></p>
+    </form>
+    <a href="/"><i class='fas fa-funnel-dollar'></i>HOME</a>
+</section>
+
+</body>
+
+</html>
