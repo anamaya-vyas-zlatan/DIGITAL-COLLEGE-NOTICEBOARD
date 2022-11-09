@@ -392,6 +392,145 @@ def addstudentClub():
 
     return render_template('Add_Member.html')
 
+#Add Message Club
+class CreateMessageClub(Form):
+    Message_Text = TextAreaField('Message Text')
+
+@app.route('/add_messaage_club', methods=['GET', 'POST'])
+@is_logged_in_club
+def addmessageClub():
+    form = CreateMessageClub(request.form)
+    error = None
+    if request.method == 'POST' and form.validate():
+        Message_Text = form.Message_Text.data
+        cur = mysql.connection.cursor()
+        flag =0
+        result = cur.execute("SELECT * FROM Club WHERE Username = %s", [session['Username']])
+        if result > 0:
+            data = cur.fetchone()
+            Club_Name = data['Club_Name']
+            Username = session['Username']
+        cur.execute(
+            "INSERT INTO Message_Club(Club_Name, Username, Message_Text) VALUES(%s, %s, %s)",
+            (Club_Name, Username, Message_Text))
+        mysql.connection.commit()
+        cur.close()
+        if flag == 0:
+            flash('Message Sent')
+            return redirect(url_for('addmessageClub'))
+
+    return render_template('Add_Message_Club.html')
+
+#View Club Members
+@app.route('/ViewClub',methods = ['GET', 'POST'])
+@is_logged_in_club
+def viewclub():
+    x = 1
+    cur =mysql.connection.cursor()
+    Club_ID = session['Username']
+    result = cur.execute("SELECT * FROM Endrolment_Club WHERE Club_ID = %s ",[session['Username']])
+    details = cur.fetchall()
+    if result > 0:
+        return render_template('View_Club.html', details = details,x=x, Club_ID = Club_ID)
+    else:
+        x = 0
+        error = 'Members not found'
+        return render_template('View_Club.html', error=error, x=x, Club_ID = Club_ID)
+        cur.close()
+    return render_template('View_Club.html', Club_ID = Club_ID)
+
+@app.route('/delete_student_club/<string:Student_ID>', methods=['POST'])
+@is_logged_in_club
+def delete_student_club(Student_ID):
+    # Create cursor
+    cur = mysql.connection.cursor()
+    # Execute
+    cur.execute("DELETE FROM Endrolment_Club WHERE Student_ID = %s", [Student_ID])
+    # Commit to DB
+    mysql.connection.commit()
+    #Close connection
+    cur.close()
+    flash('Student Deleted', 'success')
+    return redirect(url_for('dashboard_club'))
+
+#################################################################
+# VIT ADMIN INTERFACE
+#################################################################
+#Admin Login
+@app.route('/login_Admin', methods=['GET', 'POST'])
+def login_admin():
+    error = None
+    if request.method == 'POST':
+        # Get Form Fields
+        Username = request.form['Username']
+        Password = request.form['Password']
+
+        # Create cursor
+        cur = mysql.connection.cursor()
+
+        # Get user by username
+        result = cur.execute("SELECT * FROM College_Admin WHERE Username = %s", [Username])
+
+        if result > 0:
+            # Get stored hash
+            data = cur.fetchone()
+            password = data['Password']
+
+            # Compare Passwords
+            if Password == password:
+                # Passed
+                session['logged_in_Admin'] = True
+                session['Username'] = Username
+
+                flash('You are now logged in')
+                return redirect(url_for('dashboard_admin'))
+            else:
+                error = 'Invalid login'
+                return render_template('Admin_login.html', error=error)
+            # Close connection
+            cur.close()
+        else:
+            error = 'Username not found'
+            return render_template('Admin_login.html', error=error)
+
+    return render_template('Admin_login.html')
+
+def is_logged_in_admin(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in_Admin' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('Unauthorized, Please login', 'danger')
+            return redirect(url_for('index'))
+    return wrap
+
+#LogOut Admin
+@app.route('/logoutadmin')
+@is_logged_in_admin
+def logout_admin():
+    session.clear()
+    flash('You are now logged out', 'success')
+    return redirect(url_for('index'))
+
+
+#Club Dashboard
+@app.route('/dashboardadmin', methods=['GET', 'POST'])
+@is_logged_in_club
+def dashboard_admin():
+    name = session['Username']
+    return render_template('Admin_Dashboard.html', name=name)
+
+
+
+
+
+
+
+
+
+
+
 
 
 #################################################################
