@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Dashboard</title>
+</head>
+
+<body>
+<H1>Welcome {{name}}</H1>
+{% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+                    <p>{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+<a href="/clubdetails"><i class='fas fa-funnel-dollar'></i>Club Details</a><br>
+<a href="/add_student_club"><i class='fas fa-funnel-dollar'></i>Add Member</a><br>
+<!--<a href="/add_messaage_class"><i class='fas fa-funnel-dollar'></i>Add Message</a><br>-->
+<!--<a href="/ViewClass"><i class='fas fa-funnel-dollar'></i>View Class</a><br>-->
+<a href="/logoutclub"><i class='fas fa-funnel-dollar'></i>Log Out</a><br>
+</body>
+</html>

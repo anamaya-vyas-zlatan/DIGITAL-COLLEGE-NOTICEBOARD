@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+</head>
+<body>
+<H1>Club DETAILS</H1>
+{% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+                    <p>{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+ {% if error %}
+        <p><strong>Error</strong>: {{error}}</p>
+    {% endif %}
+
+<h1>Welcome, {{Club_ID}}</h1>
+ <p>Club Name: {{Club_Name}}</p>
+   <p>Club Email: {{Club_Email}}</p>
+
+<table>
+<tr>
+    <th>Admin Name</th>
+    <th>Admin Email</th>
+    <th>Admin Contact</th>
+  </tr>
+{% for data in data %}
+<TR>
+   <TD class="Student Name">{{data.Admin_Name}}</TD>
+   <TD class="Student Id">{{data.Admin_Email}}</TD>
+   <TD class="Email"><SPAN>{{data.Admin_Contact}}</SPAN></TD>
+</TR>
+{% endfor %}
+</table>
+
+
+
+
+</body>
+
+</html>

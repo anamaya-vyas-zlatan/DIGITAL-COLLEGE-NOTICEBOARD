@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Member</title>
+</head>
+<body>
+
+    <h1> <center>Add a Member</center></h1><br>
+    {% with messages = get_flashed_messages() %}
+         {% if messages %}
+               {% for message in messages %}
+                    <p>{{ message }}</p>
+               {% endfor %}
+         {% endif %}
+      {% endwith %}
+ {% if error %}
+        <p><strong>Error</strong>: {{error}}</p>
+    {% endif %}
+  <form action="" method="POST">
+      <input type="text"
+        name="Student_ID" class="form-control" placeholder="Student_ID"; value={{request.form.Student_ID}}><center>
+      <br>
+    <button type="submit" class="btn btn-dark">Submit</button>
+</center>
+<br>
+  </form>
+</body>
+</html>
